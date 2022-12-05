@@ -1,7 +1,7 @@
 
 import numpy as np
 
-class matrix_to_solve:
+class matrix_to_solve: # zmien nazwe
     def __init__(self, hard_matrix: np.ndarray[np.ndarray[int]], cable_vector: np.ndarray[(float, float)], cost_tuple: tuple):
         self.num_of_buildings = len(hard_matrix) # liczba budynków
         self.cable_vector =  cable_vector # [(koszt kabla, przesył)]
