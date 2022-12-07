@@ -55,14 +55,14 @@ def Transmission_allocation_2(solution: Solution,Matrix_to_solve: matrix_to_solv
                     if result: vector_of_request[node] += result
             return vector_of_request[node]
 
-def Matrix_of_max_transfer(solution:Solution):
-    matrix_of_max_transfer = np.zeros(solution.matrix_)
-    for id_dorm,dormitory in enumerate(solution.matrix_):
+def Matrix_of_max_transfer(Matrix_to_solve:matrix_to_solve):
+    matrix_of_max_transfer = np.zeros(Matrix_to_solve.connection_matrix)
+    for id_dorm,dormitory in enumerate(Matrix_to_solve.connection_matrix):
         for id_connect,connection in enumerate(dormitory):
             max_transfer = 0
             if connection is not None and connection != np.inf:
-                for wire in connection:
-                    max_transfer += wire
+                for id_wire,wire in enumerate(connection):
+                    max_transfer += Matrix_to_solve.cable_vector[id_wire][1]
                 matrix_of_max_transfer[id_dorm][id_connect] = max_transfer
     for i in range(1, len(matrix_of_max_transfer)):
         for j in range(i):
