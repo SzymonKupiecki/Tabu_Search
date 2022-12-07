@@ -1,4 +1,4 @@
-from test import transfer_list
+from quality import transfer_list
 
 max_connection = [[0, 90, 0, 0, 40, 0],
                   [90, 0, 30, 30, 0, 0],
