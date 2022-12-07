@@ -45,5 +45,12 @@ def Trasnsmission_allocation(solution: Solution,Matrix_to_solve: matrix_to_solve
                         stack.append(u_idx)
                         visited.append(u)
 
-
-
+def Transmission_allocation_2(solution: Solution,Matrix_to_solve: matrix_to_solve,vector_of_request):
+    def dfs(node,visited,Matrix_to_solve: matrix_to_solve,vector_of_request):
+        if node not in visited:
+            visited.append(node)
+            for ngh_idx,neighbour in enumerate(Matrix_to_solve.connection_matrix[node]):
+                if neighbour is not None and neighbour != np.inf:
+                    result = dfs(ngh_idx,visited,Matrix_to_solve,vector_of_request)
+                    if result: vector_of_request[node] += result
+            return vector_of_request[node]
