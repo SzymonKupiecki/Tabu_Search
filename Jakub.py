@@ -54,3 +54,17 @@ def Transmission_allocation_2(solution: Solution,Matrix_to_solve: matrix_to_solv
                     result = dfs(ngh_idx,visited,Matrix_to_solve,vector_of_request)
                     if result: vector_of_request[node] += result
             return vector_of_request[node]
+
+def Matrix_of_max_transfer(solution:Solution):
+    matrix_of_max_transfer = np.zeros(solution.matrix_)
+    for id_dorm,dormitory in enumerate(solution.matrix_):
+        for id_connect,connection in enumerate(dormitory):
+            max_transfer = 0
+            if connection is not None and connection != np.inf:
+                for wire in connection:
+                    max_transfer += wire
+                matrix_of_max_transfer[id_dorm][id_connect] = max_transfer
+    for i in range(1, len(matrix_of_max_transfer)):
+        for j in range(i):
+            matrix_of_max_transfer[j][i] = matrix_of_max_transfer[i][j]
+    return matrix_of_max_transfer
