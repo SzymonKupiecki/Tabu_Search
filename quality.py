@@ -1,6 +1,23 @@
 import numpy as np
 from Jan import matrix_to_solve
-from Szymon import Solution, matrix2adj
+
+
+def matrix2adj(matrix):
+    size = len(matrix)
+    adj_matrix = np.zeros((size, size), dtype=int)
+    for i in range(size):
+        for j in range(size):
+            if not np.all(matrix[i][j] == 0):
+                adj_matrix[i][j] = 1
+                adj_matrix[j][i] = 1
+    adj_list = {}
+    for i, row in enumerate(adj_matrix):
+        neighbors = []
+        for j in range(size):
+            if row[j] == 1:
+                neighbors.append(j)
+        adj_list[i] = neighbors
+    return adj_matrix, adj_list
 
 
 def matrix_of_max_transfer(info: matrix_to_solve, matrix: np.ndarray):
@@ -37,7 +54,7 @@ def dfs(adj_list):
     return visited
 
 
-def transfer_list(max_connction_matrix, adj_lst, cost_tuple):
+def transfer_list(max_connection_matrix, adj_lst, cost_tuple):
     usage_lst = [0 for i in range(len(adj_lst.keys()))]  # list to be returned
     visiting_order = dfs(adj_lst)
     last_elem_indeks = len(visiting_order) - 1
@@ -49,7 +66,7 @@ def transfer_list(max_connction_matrix, adj_lst, cost_tuple):
         parent_vertex = visiting_order[parent_index]
         expected_transfer, _, _ = cost_tuple[parent_vertex]
         # take the lower - max transfer provided by cables or transfer that left after satisfying parent expectations
-        transfer = min(max_connction_matrix[current_vertex][parent_vertex],
+        transfer = min(max_connection_matrix[current_vertex][parent_vertex],
                        usage_lst[parent_vertex] - expected_transfer)
         # give calculated transfer to current vertex and take it from parent, probably can be negative
         if transfer > 0:
