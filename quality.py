@@ -1,19 +1,19 @@
 import numpy as np
 from Jan import matrix_to_solve
-from Szymon import Solution
+from Szymon import Solution,matrix2adj
 
 
 def matrix_of_max_transfer(matrix_to_solve: matrix_to_solve):
-    matrix_of_max_transfer = np.zeros(matrix_to_solve.connection_matrix)
+    matrix_of_max_transfer = np.zeros((len(matrix_to_solve.connection_matrix),len(matrix_to_solve.connection_matrix[0])))
     for id_dorm, dormitory in enumerate(matrix_to_solve.connection_matrix):
         for id_connect, connection in enumerate(dormitory):
             max_transfer = 0
             if connection is not None and connection != np.inf:
                 for id_wire, wire in enumerate(connection):
-                    max_transfer += matrix_to_solve.cable_vector[id_wire][1]
+                    max_transfer += matrix_to_solve.cable_vector[id_wire][1] * matrix_to_solve.connection_matrix[id_dorm][id_connect][id_wire]
                 matrix_of_max_transfer[id_dorm][id_connect] = max_transfer
-    for i in range(1, len(matrix_of_max_transfer)):
-        for j in range(i):
+    for i in range(len(matrix_of_max_transfer)):
+        for j in range(i+1,len(matrix_of_max_transfer)):
             matrix_of_max_transfer[j][i] = matrix_of_max_transfer[i][j]
     return matrix_of_max_transfer
 
@@ -74,29 +74,22 @@ def transfer_list(max_connction_matrix, adj_lst, cost_tuple):
 
     return usage_lst
 
-
-def estimate_of_benefits_losses(vector_of_benefits_losses, connection_matrix, vector_of_request,
-                                available_wires):  # Funkcja szacująca zyzki i straty generowane z sieci
-    benefits = 0  # Indeks zysków
-    losses = 1  # Indeks strat
-    transmission = 1  # Indeks przesyłu danego rodzaju kabla
+def estimate_of_benefits_losses(transfer_lst:list,matrix:matrix_to_solve):
+    vector_of_request = matrix.cost_tuple
+    request = 0
+    benefits = 1  # Indeks zysków
+    losses = 2  # Indeks strat
     total_balance = 0  # Całkowity bilans
-    for dorm_id, connections in enumerate(connection_matrix):  # Iterowanie po każdym akademiku
-        total_transmit = 0  # Całkowity przesył dla danego akademika
-        for neighbour in connections:  # Iteracja po połączeniach  akademikiem
-            if neighbour != np.inf:  # Jeżeli połączenie istnieje to dodaj jego przesył do całkowitego przesyłu
-                for id_wire, amount_of_wire in enumerate(neighbour):
-                    total_transmit += available_wires[id_wire][transmission] * amount_of_wire
-        if total_transmit >= vector_of_request[dorm_id]:
-            total_balance += vector_of_benefits_losses[dorm_id][
-                benefits]  # Dodaj zyski jeżeli spełniony wymagany przesył
-        else:
-            total_balance -= vector_of_benefits_losses[dorm_id][
-                losses]  # W przeciwnym przypadku odejmij od całkowitego bilansu straty
+    for dorm_id,transfer in enumerate(transfer_lst):
+        if transfer >= vector_of_request[dorm_id][request]: total_balance += vector_of_request[dorm_id][benefits]
+        else: total_balance -= vector_of_request[dorm_id][losses]
     return total_balance
 
 
-def cost_function(difficulty_matrix, connection_matrix, available_wires):  # Funkcja obliczająca koszty budowy sieci
+def cost_function(matrix:matrix_to_solve):  # Funkcja obliczająca koszty budowy sieci
+    difficulty_matrix = matrix.hard_matrix
+    connection_matrix = matrix.connection_matrix
+    available_wires = matrix.cable_vector
     total_cost = 0  # Całkowity koszt za budowę sieci
     cost = 0  # indeks mówiący o koszcie danego kabla
     for id_verse, connection in enumerate(connection_matrix):  # Iteracja po wszystkich połączeniach danego budynku
@@ -108,6 +101,11 @@ def cost_function(difficulty_matrix, connection_matrix, available_wires):  # Fun
     return total_cost
 
 
-def quality():
+def quality(matrix: matrix_to_solve):
     # polaczyc wszytskie powyzsze
-    pass
+    max_connection = matrix_of_max_transfer(matrix)
+    adj_matrix,adj_list = matrix2adj(matrix.connection_matrix)
+    transfer_lst = transfer_list(max_connection,adj_list,matrix.cost_tuple)
+    total_bilans = estimate_of_benefits_losses(transfer_lst,matrix)
+    total_bilans -= cost_function(matrix)
+    return total_bilans
