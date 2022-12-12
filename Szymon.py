@@ -1,10 +1,7 @@
 import numpy as np
 import random
-
-
-# placeholder
-def quality(matrix):
-    return np.sum(matrix)
+from quality import quality, matrix2adj
+from Jan import matrix_to_solve
 
 
 def is_cyclic_by_dfs(adj_list):
@@ -24,24 +21,6 @@ def is_cyclic_by_dfs(adj_list):
                         cycle_exists = True
                         return cycle_exists
     return cycle_exists
-
-
-def matrix2adj(matrix):
-    size = len(matrix)
-    adj_matrix = np.zeros((size, size), dtype=int)
-    for i in range(size):
-        for j in range(size):
-            if not np.all(matrix[i][j] == 0):
-                adj_matrix[i][j] = 1
-                adj_matrix[j][i] = 1
-    adj_list = {}
-    for i, row in enumerate(adj_matrix):
-        neighbors = []
-        for j in range(size):
-            if row[j] == 1:
-                neighbors.append(j)
-        adj_list[i] = neighbors
-    return adj_matrix, adj_list
 
 
 def is_valid(matrix: np.ndarray):
@@ -78,14 +57,14 @@ def sample_matrix_generator(seed, size, con_num=3, chance=0.5):
                         con.append(0)
             row.append(con)
         matrix.append(row)
-
+    matrix[0][1] = [random.randint(0, 5), random.randint(0, 5), random.randint(0, 5)]  # żeby nie wychodziło 0 przesyłu
     return np.array(matrix)
 
 
 class Solution:
-    def __init__(self, matrix: np.ndarray):
+    def __init__(self, matrix: np.ndarray, info: matrix_to_solve):
         self.matrix_ = matrix
-        self.quality_ = quality(matrix)
+        self.quality_ = quality(info, matrix)
 
     def __eq__(self, other):
         if isinstance(other, Solution):
@@ -103,3 +82,23 @@ class Solution:
                 obj_str += np.array2string(col) + " "
             obj_str += '\n'
         return obj_str
+
+
+def optimize(starting_solution: Solution, info: matrix_to_solve, tabu_length=10, iterations=100):
+    best_solution = starting_solution
+    tabu = [starting_solution]  # INICJALIZACJA TABU
+    for _ in range(iterations):
+        neighbours = []  # WYWOŁANIE FUNKCJI SZUKAJĄCEJ SĄSIADÓW
+        neighbours.sort(key=lambda x: x.quality_)
+        final_candidate = None
+        for candidate in neighbours:
+            if candidate in tabu:
+                continue
+            final_candidate = candidate
+            # DODANIE FINAL CANDIDATE DO LISTY TABU
+            break
+        if final_candidate is None:
+            return best_solution  # oznacza to, że umiemy znaleźć nowego sąsiada
+        if final_candidate.quality_ > best_solution.quality_:
+            best_solution = final_candidate
+    return best_solution
