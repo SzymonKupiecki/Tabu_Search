@@ -1,6 +1,5 @@
 import numpy as np
 from Jan import matrix_to_solve
-from Szymon import Solution
 from copy import deepcopy
 
 
@@ -122,17 +121,15 @@ def cost_function(info: matrix_to_solve, matrix: np.ndarray):  # Funkcja oblicza
                     total_cost += available_wires[id_wire][cost] * amount_of_wire * difficulty_matrix[id_verse][id_row]
     return total_cost
 
-def find_neigbour(solution:Solution, info:matrix_to_solve):
+def find_neigbour(solution:np.ndarray, info:matrix_to_solve):
     position = [0,0]
-    matrix = deepcopy(solution.matrix_)
+    matrix = deepcopy(solution)
     while position[0] == position[1]:
         position[0] = np.random.randint(0,len(matrix))
         position[1] = np.random.randint(0, len(matrix))
-    id_of_cable = np.random.randint(0,len(info.cable_vector)+1)
+    id_of_cable = np.random.randint(0,len(info.cable_vector))
     increase_of_cable = np.random.randint(1,4)
-    if matrix[position[0]][position[1]][id_of_cable] is None:
-        matrix[position[0]][position[1]][id_of_cable] = increase_of_cable
-    else: matrix[position[0]][position[1]][id_of_cable] += increase_of_cable
+    matrix[position[0]][position[1]][id_of_cable] += increase_of_cable
     return matrix
 
 
