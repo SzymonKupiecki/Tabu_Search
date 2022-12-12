@@ -25,7 +25,8 @@ def matrix_of_max_transfer(info: matrix_to_solve, matrix: np.ndarray):
     for id_dorm, dormitory in enumerate(matrix):
         for id_connect, connection in enumerate(dormitory):
             max_transfer = 0
-            if connection is not None and connection != np.inf:
+            # if connection is not None and connection != np.inf: to było poprzednio
+            if np.all(connection != 0):
                 for id_wire, wire in enumerate(connection):
                     max_transfer += info.cable_vector[id_wire][1] * matrix[id_dorm][id_connect][id_wire]
                 matrix_of_max_transfer[id_dorm][id_connect] = max_transfer
@@ -112,7 +113,8 @@ def cost_function(info: matrix_to_solve, matrix: np.ndarray):  # Funkcja oblicza
     cost = 0  # indeks mówiący o koszcie danego kabla
     for id_verse, connection in enumerate(connection_matrix):  # Iteracja po wszystkich połączeniach danego budynku
         for id_row, wires in enumerate(connection):  # Iteracja po wszystkich rodzajach kabla w danym połączeniu
-            if wires != np.inf:  # Jeżeli połączenie istnieje to oblicz koszty jego utworzenia
+            # if wires != np.inf:  # Jeżeli połączenie istnieje to oblicz koszty jego utworzenia to było poprzednio
+            if np.all(wires != 0):  # Jeżeli połączenie istnieje to oblicz koszty jego utworzenia
                 for id_wire, amount_of_wire in enumerate(wires):
                     # Dodaj do całkowitego kosztu koszt jednego połączenia
                     total_cost += available_wires[id_wire][cost] * amount_of_wire * difficulty_matrix[id_verse][id_row]
