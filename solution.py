@@ -1,10 +1,10 @@
 import numpy as np
 from quality import quality
-from dtypes import matrix_to_solve
+from dtypes import ProblemInfo
 
 
 class Solution:
-    def __init__(self, matrix: np.ndarray, info: matrix_to_solve):
+    def __init__(self, matrix: np.ndarray, info: ProblemInfo):
         self.matrix_ = matrix
         self.quality_ = quality(info, matrix)
 

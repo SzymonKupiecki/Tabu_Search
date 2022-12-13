@@ -1,5 +1,5 @@
 import numpy as np
-from dtypes import matrix_to_solve
+from dtypes import ProblemInfo
 from copy import deepcopy
 
 
@@ -21,7 +21,7 @@ def matrix2adj(matrix):
     return adj_matrix, adj_list
 
 
-def matrix_of_max_transfer(info: matrix_to_solve, matrix: np.ndarray):
+def matrix_of_max_transfer(info: ProblemInfo, matrix: np.ndarray):
     max_transfer_matrix = np.zeros((len(matrix), len(matrix[0])))
     for id_dorm, dormitory in enumerate(matrix):
         for id_connect, connection in enumerate(dormitory):
@@ -94,7 +94,7 @@ def transfer_list(max_connection_matrix, adj_lst, cost_tuple):
     return usage_lst
 
 
-def estimate_of_benefits_losses(transfer_lst: list, matrix: matrix_to_solve):
+def estimate_of_benefits_losses(transfer_lst: list, matrix: ProblemInfo):
     vector_of_request = matrix.cost_tuple
     request = 0
     benefits = 1  # Indeks zysków
@@ -108,7 +108,7 @@ def estimate_of_benefits_losses(transfer_lst: list, matrix: matrix_to_solve):
     return total_balance
 
 
-def cost_function(info: matrix_to_solve, matrix: np.ndarray):  # Funkcja obliczająca koszty budowy sieci
+def cost_function(info: ProblemInfo, matrix: np.ndarray):  # Funkcja obliczająca koszty budowy sieci
     difficulty_matrix = info.hard_matrix
     connection_matrix = matrix
     available_wires = info.cable_vector
@@ -124,7 +124,7 @@ def cost_function(info: matrix_to_solve, matrix: np.ndarray):  # Funkcja oblicza
     return total_cost
 
 
-def find_neighbour(solution: np.ndarray, info: matrix_to_solve):
+def find_neighbour(solution: np.ndarray, info: ProblemInfo):
     position = [0, 0]
     matrix = deepcopy(solution)
     position[0] = np.random.randint(0, len(matrix)-1)
@@ -138,7 +138,7 @@ def find_neighbour(solution: np.ndarray, info: matrix_to_solve):
     return matrix
 
 
-def quality(info: matrix_to_solve, matrix: np.ndarray):
+def quality(info: ProblemInfo, matrix: np.ndarray):
     max_connection = matrix_of_max_transfer(info, matrix)
     adj_matrix, adj_list = matrix2adj(matrix)
     transfer_lst = transfer_list(max_connection, adj_list, info.cost_tuple)

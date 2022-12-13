@@ -1,9 +1,9 @@
 import numpy as np
 import random
-from quality import quality, matrix2adj, find_neighbour
-from dtypes import matrix_to_solve
+from quality import matrix2adj, find_neighbour
+from dtypes import ProblemInfo
 from solution import Solution
-from Jan import Tabu_list
+from Jan import TabuList
 
 
 def is_cyclic_by_dfs(adj_list):
@@ -64,13 +64,13 @@ def sample_matrix_generator(seed, size, con_num=3, chance=0.5):
     return matrix
 
 
-def optimize(starting_solution: Solution, info: matrix_to_solve, tabu_length=10, iterations=200, raport=True):
+def optimize(starting_solution: Solution, info: ProblemInfo, tabu_length=10, iterations=200, raport=True):
     if raport:
         print(f"Start optymalizacji zadania:\n{starting_solution}\nz parametrami: długość tabu = {tabu_length}"
               f", ilość maksymalnych iteracji = {iterations}")
     best_solution = starting_solution
     last_solution = starting_solution
-    tabu = Tabu_list(tabu_length)  # INICJALIZACJA TABU
+    tabu = TabuList(tabu_length)  # INICJALIZACJA TABU
     tabu.insert_elem(starting_solution)
     for i in range(iterations):
         neighbours = []  # WYWOŁANIE FUNKCJI SZUKAJĄCEJ SĄSIADÓW
