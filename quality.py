@@ -124,12 +124,14 @@ def cost_function(info: matrix_to_solve, matrix: np.ndarray):  # Funkcja oblicza
 def find_neigbour(solution:np.ndarray, info:matrix_to_solve):
     position = [0,0]
     matrix = deepcopy(solution)
-    while position[0] == position[1]:
-        position[0] = np.random.randint(0,len(matrix))
-        position[1] = np.random.randint(0, len(matrix))
+    position[0] = np.random.randint(0,len(matrix)-1)
+    position[1] = np.random.randint(position[0]+1, len(matrix))
     id_of_cable = np.random.randint(0,len(info.cable_vector))
-    increase_of_cable = np.random.randint(1,4)
-    matrix[position[0]][position[1]][id_of_cable] += increase_of_cable
+    increase_of_cable = np.random.randint(1,5)
+    if np.random.randint(0,2) == 1 or matrix[position[0]][position[1]][id_of_cable] < increase_of_cable:
+        matrix[position[0]][position[1]][id_of_cable] += increase_of_cable
+    else:
+        matrix[position[0]][position[1]][id_of_cable] -= increase_of_cable
     return matrix
 
 
