@@ -1,7 +1,8 @@
 import random
 import numpy as np
 from dtypes import ProblemInfo
-from Szymon import sample_matrix_generator, optimize
+from main_loop import optimize
+from solution_matrix import sample_matrix_generator
 from solution import Solution
 
 # sample data

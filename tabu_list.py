@@ -7,12 +7,6 @@ class TabuList:
         self.size = size
         self.tab = []
 
-    # def is_elem_in_tab(self, elem):
-    #     for i in range(len(self.tab)):
-    #         if elem == self.tab[i]:
-    #             return True
-    #     return False
-
     def __contains__(self, item):
         return item in self.tab
 

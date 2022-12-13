@@ -1,9 +1,5 @@
 import numpy as np
 import random
-from quality import matrix2adj, find_neighbour
-from dtypes import ProblemInfo
-from solution import Solution
-from Jan import TabuList
 
 
 def is_cyclic_by_dfs(adj_list):
@@ -41,6 +37,24 @@ def is_valid(matrix: np.ndarray):
     return not is_cyclic_by_dfs(adj_list)
 
 
+def matrix2adj(matrix):
+    size = len(matrix)
+    adj_matrix = np.zeros((size, size), dtype=int)
+    for i in range(size):
+        for j in range(size):
+            if not np.all(matrix[i][j] == 0):
+                adj_matrix[i][j] = 1
+                adj_matrix[j][i] = 1
+    adj_list = {}
+    for i, row in enumerate(adj_matrix):
+        neighbors = []
+        for j in range(size):
+            if row[j] == 1:
+                neighbors.append(j)
+        adj_list[i] = neighbors
+    return adj_matrix, adj_list
+
+
 def sample_matrix_generator(seed, size, con_num=3, chance=0.5):
     random.seed(seed)
     count = 0
@@ -62,34 +76,3 @@ def sample_matrix_generator(seed, size, con_num=3, chance=0.5):
             break
         count += 1
     return matrix
-
-
-def optimize(starting_solution: Solution, info: ProblemInfo, tabu_length=10, iterations=200, raport=True):
-    if raport:
-        print(f"Start optymalizacji zadania:\n{starting_solution}\nz parametrami: długość tabu = {tabu_length}"
-              f", ilość maksymalnych iteracji = {iterations}")
-    best_solution = starting_solution
-    last_solution = starting_solution
-    tabu = TabuList(tabu_length)  # INICJALIZACJA TABU
-    tabu.insert_elem(starting_solution)
-    for i in range(iterations):
-        neighbours = []  # WYWOŁANIE FUNKCJI SZUKAJĄCEJ SĄSIADÓW
-        for _ in range(10):
-            neighbours.append(Solution(find_neighbour(last_solution.matrix_, info), info))
-        neighbours.sort(key=lambda x: x.quality_, reverse=True)
-        last_solution = None
-        for candidate in neighbours:
-            if candidate in tabu:
-                continue
-            last_solution = candidate
-            # DODANIE LAST CANDIDATE DO LISTY TABU
-            tabu.insert_elem(last_solution)
-            break
-        if last_solution is None:
-            print(f"Nie znaleziono kandydatów i =  {i}")
-            return best_solution  # oznacza to, że nie umiemy znaleźć nowego sąsiada
-        if last_solution.quality_ > best_solution.quality_:
-            best_solution = last_solution
-            if raport:
-                print(f"Poprawa w {i} iteracji na {best_solution.quality_}")
-    return best_solution

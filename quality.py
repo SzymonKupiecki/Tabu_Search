@@ -1,24 +1,6 @@
 import numpy as np
 from dtypes import ProblemInfo
-from copy import deepcopy
-
-
-def matrix2adj(matrix):
-    size = len(matrix)
-    adj_matrix = np.zeros((size, size), dtype=int)
-    for i in range(size):
-        for j in range(size):
-            if not np.all(matrix[i][j] == 0):
-                adj_matrix[i][j] = 1
-                adj_matrix[j][i] = 1
-    adj_list = {}
-    for i, row in enumerate(adj_matrix):
-        neighbors = []
-        for j in range(size):
-            if row[j] == 1:
-                neighbors.append(j)
-        adj_list[i] = neighbors
-    return adj_matrix, adj_list
+from solution_matrix import matrix2adj
 
 
 def matrix_of_max_transfer(info: ProblemInfo, matrix: np.ndarray):
@@ -122,20 +104,6 @@ def cost_function(info: ProblemInfo, matrix: np.ndarray):  # Funkcja obliczając
                     # Dodaj do całkowitego kosztu koszt jednego połączenia
                     total_cost += available_wires[id_wire][cost] * amount_of_wire * difficulty_matrix[id_verse][id_row]
     return total_cost
-
-
-def find_neighbour(solution: np.ndarray, info: ProblemInfo):
-    position = [0, 0]
-    matrix = deepcopy(solution)
-    position[0] = np.random.randint(0, len(matrix)-1)
-    position[1] = np.random.randint(position[0]+1, len(matrix))
-    id_of_cable = np.random.randint(0, len(info.cable_vector))
-    increase_of_cable = np.random.randint(1, 5)
-    if np.random.randint(0, 2) == 1 or matrix[position[0]][position[1]][id_of_cable] < increase_of_cable:
-        matrix[position[0]][position[1]][id_of_cable] += increase_of_cable
-    else:
-        matrix[position[0]][position[1]][id_of_cable] -= increase_of_cable
-    return matrix
 
 
 def quality(info: ProblemInfo, matrix: np.ndarray):
