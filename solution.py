@@ -28,9 +28,9 @@ class Solution:
         return obj_str
 
 
-def find_neighbour(solution: np.ndarray, info: ProblemInfo):
+def find_neighbour(solution: Solution, info: ProblemInfo):
     position = [0, 0]
-    matrix = deepcopy(solution)
+    matrix = deepcopy(solution.matrix_)
     position[0] = np.random.randint(0, len(matrix)-1)
     position[1] = np.random.randint(position[0]+1, len(matrix))
     id_of_cable = np.random.randint(0, len(info.cable_vector))

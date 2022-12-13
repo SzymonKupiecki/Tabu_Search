@@ -14,7 +14,7 @@ def optimize(starting_solution: Solution, info: ProblemInfo, tabu_length=10, ite
     for i in range(iterations):
         neighbours = []  # WYWOŁANIE FUNKCJI SZUKAJĄCEJ SĄSIADÓW
         for _ in range(10):
-            neighbours.append(Solution(find_neighbour(last_solution.matrix_, info), info))
+            neighbours.append(Solution(find_neighbour(last_solution, info), info))
         neighbours.sort(key=lambda x: x.quality_, reverse=True)
         last_solution = None
         for candidate in neighbours:
