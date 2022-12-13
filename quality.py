@@ -22,7 +22,7 @@ def matrix2adj(matrix):
 
 
 def matrix_of_max_transfer(info: matrix_to_solve, matrix: np.ndarray):
-    matrix_of_max_transfer = np.zeros((len(matrix), len(matrix[0])))
+    max_transfer_matrix = np.zeros((len(matrix), len(matrix[0])))
     for id_dorm, dormitory in enumerate(matrix):
         for id_connect, connection in enumerate(dormitory):
             max_transfer = 0
@@ -30,11 +30,11 @@ def matrix_of_max_transfer(info: matrix_to_solve, matrix: np.ndarray):
             if np.any(connection != 0):
                 for id_wire, wire in enumerate(connection):
                     max_transfer += info.cable_vector[id_wire][1] * matrix[id_dorm][id_connect][id_wire]
-                matrix_of_max_transfer[id_dorm][id_connect] = max_transfer
-    for i in range(len(matrix_of_max_transfer)):
-        for j in range(i+1, len(matrix_of_max_transfer)):
-            matrix_of_max_transfer[j][i] = matrix_of_max_transfer[i][j]
-    return matrix_of_max_transfer
+                max_transfer_matrix[id_dorm][id_connect] = max_transfer
+    for i in range(len(max_transfer_matrix)):
+        for j in range(i+1, len(max_transfer_matrix)):
+            max_transfer_matrix[j][i] = max_transfer_matrix[i][j]
+    return max_transfer_matrix
 
 
 def dfs(adj_list):
@@ -57,7 +57,7 @@ def dfs(adj_list):
 
 
 def transfer_list(max_connection_matrix, adj_lst, cost_tuple):
-    usage_lst = [0 for i in range(len(adj_lst.keys()))]  # list to be returned
+    usage_lst = [0 for _ in range(len(adj_lst.keys()))]  # list to be returned
     visiting_order = dfs(adj_lst)
     last_elem_indeks = len(visiting_order) - 1
     usage_lst[0] = np.inf  # server has infinite transfer
@@ -101,8 +101,10 @@ def estimate_of_benefits_losses(transfer_lst: list, matrix: matrix_to_solve):
     losses = 2  # Indeks strat
     total_balance = 0  # Całkowity bilans
     for dorm_id, transfer in enumerate(transfer_lst):
-        if transfer >= vector_of_request[dorm_id][request]: total_balance += vector_of_request[dorm_id][benefits]
-        else: total_balance -= vector_of_request[dorm_id][losses]
+        if transfer >= vector_of_request[dorm_id][request]:
+            total_balance += vector_of_request[dorm_id][benefits]
+        else:
+            total_balance -= vector_of_request[dorm_id][losses]
     return total_balance
 
 
@@ -121,14 +123,15 @@ def cost_function(info: matrix_to_solve, matrix: np.ndarray):  # Funkcja oblicza
                     total_cost += available_wires[id_wire][cost] * amount_of_wire * difficulty_matrix[id_verse][id_row]
     return total_cost
 
-def find_neigbour(solution:np.ndarray, info:matrix_to_solve):
-    position = [0,0]
+
+def find_neighbour(solution: np.ndarray, info: matrix_to_solve):
+    position = [0, 0]
     matrix = deepcopy(solution)
-    position[0] = np.random.randint(0,len(matrix)-1)
+    position[0] = np.random.randint(0, len(matrix)-1)
     position[1] = np.random.randint(position[0]+1, len(matrix))
-    id_of_cable = np.random.randint(0,len(info.cable_vector))
-    increase_of_cable = np.random.randint(1,5)
-    if np.random.randint(0,2) == 1 or matrix[position[0]][position[1]][id_of_cable] < increase_of_cable:
+    id_of_cable = np.random.randint(0, len(info.cable_vector))
+    increase_of_cable = np.random.randint(1, 5)
+    if np.random.randint(0, 2) == 1 or matrix[position[0]][position[1]][id_of_cable] < increase_of_cable:
         matrix[position[0]][position[1]][id_of_cable] += increase_of_cable
     else:
         matrix[position[0]][position[1]][id_of_cable] -= increase_of_cable
@@ -136,7 +139,6 @@ def find_neigbour(solution:np.ndarray, info:matrix_to_solve):
 
 
 def quality(info: matrix_to_solve, matrix: np.ndarray):
-    # polaczyc wszytskie powyzsze
     max_connection = matrix_of_max_transfer(info, matrix)
     adj_matrix, adj_list = matrix2adj(matrix)
     transfer_lst = transfer_list(max_connection, adj_list, info.cost_tuple)

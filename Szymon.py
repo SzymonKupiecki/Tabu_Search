@@ -1,6 +1,6 @@
 import numpy as np
 import random
-from quality import quality, matrix2adj, find_neigbour
+from quality import quality, matrix2adj, find_neighbour
 from dtypes import matrix_to_solve
 from solution import Solution
 from Jan import Tabu_list
@@ -43,49 +43,53 @@ def is_valid(matrix: np.ndarray):
 
 def sample_matrix_generator(seed, size, con_num=3, chance=0.5):
     random.seed(seed)
-    matrix = []
-    for i in range(size):
-        row = []
-        for j in range(size):
-            con = []
-            for _ in range(con_num):
-                individual_chance = random.random()
-                if i >= j:
-                    con.append(0)
+    count = 0
+    while True and count < 1000:
+        matrix = np.zeros((size, size, con_num), dtype=int)
+        adj_matrix = np.zeros((size, size), dtype=int)
+        for row in range(size):
+            for col in range(size):
+                if row >= col:
+                    continue
                 else:
-                    if individual_chance < chance:
-                        con.append(random.randint(0, 5))
-                    else:
-                        con.append(0)
-            row.append(con)
-        matrix.append(row)
-    matrix[0][1] = [random.randint(0, 5), random.randint(0, 5), random.randint(0, 5)]  # żeby nie wychodziło 0 przesyłu
-    return np.array(matrix)
+                    # ilość połączeń mniejsza niż 3
+                    if np.sum(adj_matrix[row]) <= 3 and np.sum(adj_matrix[:, col]) <= 3:
+                        if random.random() > chance:
+                            adj_matrix[row][col] = 1
+                            for i in range(con_num):
+                                matrix[row][col][i] = random.randint(0, 5)
+        if is_valid(matrix):
+            break
+        count += 1
+    return matrix
 
 
-def optimize(starting_solution: Solution, info: matrix_to_solve, tabu_length=10, iterations=300):
+def optimize(starting_solution: Solution, info: matrix_to_solve, tabu_length=10, iterations=200, raport=True):
+    if raport:
+        print(f"Start optymalizacji zadania:\n{starting_solution}\nz parametrami: długość tabu = {tabu_length}"
+              f", ilość maksymalnych iteracji = {iterations}")
     best_solution = starting_solution
     last_solution = starting_solution
-    tabu = Tabu_list(20)  # INICJALIZACJA TABU
+    tabu = Tabu_list(tabu_length)  # INICJALIZACJA TABU
     tabu.insert_elem(starting_solution)
     for i in range(iterations):
         neighbours = []  # WYWOŁANIE FUNKCJI SZUKAJĄCEJ SĄSIADÓW
-        for _ in range(100):
-            neighbours.append(Solution(find_neigbour(last_solution.matrix_, info), info))
+        for _ in range(10):
+            neighbours.append(Solution(find_neighbour(last_solution.matrix_, info), info))
         neighbours.sort(key=lambda x: x.quality_, reverse=True)
-        final_candidate = None
+        last_solution = None
         for candidate in neighbours:
             if candidate in tabu:
                 continue
-            final_candidate = candidate
             last_solution = candidate
-            # DODANIE FINAL CANDIDATE DO LISTY TABU
+            # DODANIE LAST CANDIDATE DO LISTY TABU
             tabu.insert_elem(last_solution)
             break
-        if final_candidate is None:
+        if last_solution is None:
             print(f"Nie znaleziono kandydatów i =  {i}")
-            return best_solution  # oznacza to, że umiemy znaleźć nowego sąsiada
-        if final_candidate.quality_ > best_solution.quality_:
-            best_solution = final_candidate
-    print("Wyszedłem")
+            return best_solution  # oznacza to, że nie umiemy znaleźć nowego sąsiada
+        if last_solution.quality_ > best_solution.quality_:
+            best_solution = last_solution
+            if raport:
+                print(f"Poprawa w {i} iteracji na {best_solution.quality_}")
     return best_solution

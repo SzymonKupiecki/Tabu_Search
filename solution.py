@@ -23,4 +23,5 @@ class Solution:
             for col in row:
                 obj_str += np.array2string(col) + " "
             obj_str += '\n'
+        obj_str += f"Quality = {self.quality_}"
         return obj_str
