@@ -29,7 +29,7 @@ from solution import Solution
 class Tabu_list:
     def __init__(self, size):
         self.size = size
-        self.tab = np.zeros((5,), dtype = int)
+        self.tab = []
 
     # def is_elem_in_tab(self, elem):
     #     for i in range(len(self.tab)):
@@ -54,13 +54,10 @@ class Tabu_list:
 
     def insert_elem(self, elem):
         if isinstance(elem, Solution):
-            for i in range(len(self.tab)): ## sprawdzam czy jest jakiś elem = 0 żeby go nadpisać
-                if self.tab[i] == 0:
-                    self.tab[i] = elem
-                    return True
-            self.tab = np.roll(self.tab, 1)
-            self.tab[0] = elem
-            self.tab = np.roll(self.tab,-1)
-            return True
-        else:
-            return False
+            if isinstance(self.tab, list):
+                self.tab.append(elem)
+                if len(self.tab) == self.size:
+                    self.tab = np.array(self.tab)
+            else:
+                self.tab[0] = elem
+                self.tab = np.roll(self.tab, -1)
