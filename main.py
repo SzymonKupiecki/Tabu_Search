@@ -1,6 +1,8 @@
 import numpy as np
-from Jan import matrix_to_solve
-from Szymon import Solution, sample_matrix_generator, is_valid, optimize
+from dtypes import matrix_to_solve
+from Szymon import sample_matrix_generator, is_valid, optimize
+from solution import Solution
+from Jan import Tabu_list
 
 # sample data
 hard_matrix = [[0, 20, 10, 15, 80, 60],
@@ -28,10 +30,13 @@ while not valid_matrix and i < 10000:
 
 starting_solution = Solution(starting_solution, info)
 
-print(i)
-print(starting_solution)
-print(starting_solution.quality_)
+# print(i)
+# print(starting_solution)
+# print(starting_solution.quality_)
 
-res = optimize(starting_solution, info)
-print(res.quality_)
-print(res)
+# res = optimize(starting_solution, info)
+# print(res.quality_)
+# print(res)
+
+test = Tabu_list(2)
+test.insert_elem(starting_solution)

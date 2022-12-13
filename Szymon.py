@@ -1,7 +1,8 @@
 import numpy as np
 import random
 from quality import quality, matrix2adj
-from Jan import matrix_to_solve
+from dtypes import matrix_to_solve
+from solution import Solution
 
 
 def is_cyclic_by_dfs(adj_list):
@@ -59,29 +60,6 @@ def sample_matrix_generator(seed, size, con_num=3, chance=0.5):
         matrix.append(row)
     matrix[0][1] = [random.randint(0, 5), random.randint(0, 5), random.randint(0, 5)]  # żeby nie wychodziło 0 przesyłu
     return np.array(matrix)
-
-
-class Solution:
-    def __init__(self, matrix: np.ndarray, info: matrix_to_solve):
-        self.matrix_ = matrix
-        self.quality_ = quality(info, matrix)
-
-    def __eq__(self, other):
-        if isinstance(other, Solution):
-            if self.quality_ != other.quality_:
-                return False
-            else:
-                return np.all(self.matrix_ == other.matrix_)
-        elif isinstance(other, np.ndarray):
-            return np.all(self.matrix_ == other)
-
-    def __str__(self):
-        obj_str = ""
-        for row in self.matrix_:
-            for col in row:
-                obj_str += np.array2string(col) + " "
-            obj_str += '\n'
-        return obj_str
 
 
 def optimize(starting_solution: Solution, info: matrix_to_solve, tabu_length=10, iterations=100):

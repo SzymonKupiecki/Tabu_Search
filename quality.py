@@ -1,5 +1,5 @@
 import numpy as np
-from Jan import matrix_to_solve
+from dtypes import matrix_to_solve
 from copy import deepcopy
 
 
