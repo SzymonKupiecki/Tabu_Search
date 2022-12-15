@@ -3,7 +3,7 @@ from quality import quality
 from dtypes import ProblemInfo, ChangeType
 from copy import deepcopy
 from typing import List, Tuple
-from solution_matrix import matrix2adj
+from solution_matrix import is_valid, matrix2adj
 import random
 
 
@@ -76,10 +76,30 @@ def find_neighbour_transfer(solution: Solution, info: ProblemInfo):
         matrix = Solution(matrix, info, changes=[(i, j, ChangeType.INCREASE)])
     else:
         matrix[i][j][id_of_cable] -= increase_of_cable
-        matrix = Solution(matrix, info, changes=[(i, j, ChangeType.DECREASE)])
+        if np.all(matrix[i][j] == 0):
+            matrix = Solution(matrix, info, changes=[(i, j, ChangeType.DELETION), (i, j, ChangeType.DECREASE)])
+        else:
+            matrix = Solution(matrix, info, changes=[(i, j, ChangeType.DECREASE)])
     return matrix
 
 
 def find_neighbour_connection(solution: Solution, info: ProblemInfo):
     # FUNKCJA POWINNA USUWAĆ ALBO DODAWAĆ Z POŁĄCZENIA Z ZACHOWANIEM ACYKLICZNOŚCI
-    pass
+    count = 0
+    adj_matrix, _ = matrix2adj(solution.matrix_)
+    while count < 50:
+        try_matrix = deepcopy(solution.matrix_)
+        coords = np.argwhere(adj_matrix == 0)
+        coords = random.choice(coords)
+        i = coords[0]
+        j = coords[1]
+        if i >= j:
+            count += 1
+            continue
+        try_matrix[i][j][0] = 3
+        try_matrix[i][j][1] = 3
+        try_matrix[i][j][2] = 3
+        if is_valid(try_matrix):
+            return Solution(try_matrix, info, changes=[(i, j, ChangeType.ADDITION)])
+        count += 1
+    return None

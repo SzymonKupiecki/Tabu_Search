@@ -15,7 +15,9 @@ def optimize(starting_solution: Solution, info: ProblemInfo, tabu_length=10, ite
         neighbours = []  # list to store neighbours found in iteration
         for _ in range(number_of_neighbours_in_iteration//2):  # finding neighbours, 50% of each type
             neighbours.append(find_neighbour_transfer(last_solution, info))
-            # neighbours.append(find_neighbour_connection(last_solution, info))
+            unoptimized_shit = find_neighbour_connection(last_solution, info)
+            if unoptimized_shit is not None:
+                neighbours.append(unoptimized_shit)
         neighbours.sort(key=lambda x: x.quality_, reverse=True)  # sort by quality
         next_solution = None
         for candidate in neighbours:
