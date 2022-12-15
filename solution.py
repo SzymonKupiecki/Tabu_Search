@@ -1,13 +1,18 @@
 import numpy as np
 from quality import quality
-from dtypes import ProblemInfo
+from dtypes import ProblemInfo, ChangeType
 from copy import deepcopy
+from typing import List, Tuple
 
 
 class Solution:
-    def __init__(self, matrix: np.ndarray, info: ProblemInfo):
+    def __init__(self, matrix: np.ndarray, info: ProblemInfo, changes: List[Tuple[int, int, ChangeType]] = None):
         self.matrix_ = matrix
         self.quality_ = quality(info, matrix)
+        if changes is None:
+            self.changes_ = []
+        else:
+            self.changes_ = changes
 
     def __eq__(self, other):
         if isinstance(other, Solution):
@@ -28,7 +33,25 @@ class Solution:
         return obj_str
 
 
-def find_neighbour(solution: Solution, info: ProblemInfo):
+def forbidden_moves(solution: Solution):
+    # function return moves that should be forbidden - moves opposite to already made
+    moves = []
+    for change in solution.changes_:
+        i, j, change_type = change
+        match change_type:
+            case ChangeType.INCREASE:
+                moves.append((i, j, ChangeType.DECREASE))
+            case ChangeType.DECREASE:
+                moves.append((i, j, ChangeType.INCREASE))
+            case ChangeType.ADDITION:
+                moves.append((i, j, ChangeType.DELETION))
+            case ChangeType.DELETION:
+                moves.append((i, j, ChangeType.ADDITION))
+    return moves
+
+
+def find_neighbour_transfer(solution: Solution, info: ProblemInfo):
+    # FUNKCJA POWINNA TYLKO ZWIĘKSZAĆ I ZMNIEJSZAĆ PRZESYŁ NA ISTNIEJĄCYCH POŁĄCZENIACH
     position = [0, 0]
     matrix = deepcopy(solution.matrix_)
     position[0] = np.random.randint(0, len(matrix)-1)
@@ -40,3 +63,8 @@ def find_neighbour(solution: Solution, info: ProblemInfo):
     else:
         matrix[position[0]][position[1]][id_of_cable] -= increase_of_cable
     return matrix
+
+
+def find_neighbour_connection(solution: Solution, info: ProblemInfo):
+    # FUNKCJA POWINNA USUWAĆ ALBO DODAWAĆ Z POŁĄCZENIA Z ZACHOWANIEM ACYKLICZNOŚCI
+    pass
