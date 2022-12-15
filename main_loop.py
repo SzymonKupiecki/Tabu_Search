@@ -6,7 +6,7 @@ from tabu_list import TabuList
 def optimize(starting_solution: Solution, info: ProblemInfo, tabu_length=10, iterations=200, raport=True):
     if raport:
         print(f"Start optymalizacji zadania:\n{starting_solution}\nz parametrami: długość tabu = {tabu_length}"
-              f", ilość maksymalnych iteracji = {iterations}")
+              f", ilość iteracji = {iterations}")
     best_solution = starting_solution
     last_solution = starting_solution
     tabu = TabuList(tabu_length)  # INICJALIZACJA TABU
@@ -26,9 +26,11 @@ def optimize(starting_solution: Solution, info: ProblemInfo, tabu_length=10, ite
             break
         if last_solution is None:
             print(f"Nie znaleziono kandydatów i =  {i}")
-            return best_solution  # oznacza to, że nie umiemy znaleźć nowego sąsiada
+            continue  # oznacza to, że nie umiemy znaleźć nowego sąsiada
         if last_solution.quality_ > best_solution.quality_:
             best_solution = last_solution
             if raport:
                 print(f"Poprawa w {i} iteracji na {best_solution.quality_}")
+    if raport:
+        print(f"Znalezione rozwiązanie:\n{best_solution}")
     return best_solution

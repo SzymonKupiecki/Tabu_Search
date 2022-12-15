@@ -19,7 +19,6 @@ cost_tuples = [(0, 0, 0), (90, 300, 15), (110, 450, 70), (80, 150, 40), (70, 250
 
 info = ProblemInfo(np.array(hard_matrix) * 0.01, np.array(cable_vector), np.array(cost_tuples))
 
-starting_solution = Solution(sample_matrix_generator(0, 6, 3, 0.8), info)
+starting_solution = Solution(sample_matrix_generator(0, 6, 3, 0.3), info)
 random.seed(None)
-res = optimize(starting_solution, info)
-print(res)
+res = optimize(starting_solution, info, tabu_length=50, iterations=200, raport=True)

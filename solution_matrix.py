@@ -56,6 +56,7 @@ def matrix2adj(matrix):
 
 
 def sample_matrix_generator(seed, size, con_num=3, chance=0.5):
+    matrix = None
     random.seed(seed)
     count = 0
     while True and count < 1000:
@@ -68,7 +69,7 @@ def sample_matrix_generator(seed, size, con_num=3, chance=0.5):
                 else:
                     # ilość połączeń mniejsza niż 3
                     if np.sum(adj_matrix[row]) <= 3 and np.sum(adj_matrix[:, col]) <= 3:
-                        if random.random() > chance:
+                        if random.random() < chance:
                             adj_matrix[row][col] = 1
                             for i in range(con_num):
                                 matrix[row][col][i] = random.randint(0, 5)
