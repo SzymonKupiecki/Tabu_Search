@@ -89,7 +89,7 @@ def find_neighbour_connection(solution: Solution, info: ProblemInfo):
     adj_matrix, _ = matrix2adj(solution.matrix_)
     while count < 50:
         try_matrix = deepcopy(solution.matrix_)
-        coords = np.argwhere(adj_matrix == 0)
+        coords = np.triu(np.argwhere(adj_matrix == 0))
         coords = random.choice(coords)
         i = coords[0]
         j = coords[1]
