@@ -53,17 +53,6 @@ def forbidden_moves(solution: Solution):
 
 
 def find_neighbour_transfer(solution: Solution, info: ProblemInfo):
-    # # FUNKCJA POWINNA TYLKO ZWIĘKSZAĆ I ZMNIEJSZAĆ PRZESYŁ NA ISTNIEJĄCYCH POŁĄCZENIACH
-    # position = [0, 0]
-    # matrix = deepcopy(solution.matrix_)
-    # position[0] = np.random.randint(0, len(matrix)-1)
-    # position[1] = np.random.randint(position[0]+1, len(matrix))
-    # id_of_cable = np.random.randint(0, len(info.cable_vector))
-    # increase_of_cable = np.random.randint(1, 5)
-    # if np.random.randint(0, 2) == 1 or matrix[position[0]][position[1]][id_of_cable] < increase_of_cable:
-    #     matrix[position[0]][position[1]][id_of_cable] += increase_of_cable
-    # else:
-    #     matrix[position[0]][position[1]][id_of_cable] -= increase_of_cable
     matrix = deepcopy(solution.matrix_)
     increase_of_cable = np.random.randint(1, 5)
     coords = np.argwhere(matrix != 0)
@@ -83,23 +72,33 @@ def find_neighbour_transfer(solution: Solution, info: ProblemInfo):
     return matrix
 
 
-def find_neighbour_connection(solution: Solution, info: ProblemInfo):
-    # FUNKCJA POWINNA USUWAĆ ALBO DODAWAĆ Z POŁĄCZENIA Z ZACHOWANIEM ACYKLICZNOŚCI
+def find_neighbour_add_connection(solution: Solution, info: ProblemInfo):
     count = 0
     adj_matrix, _ = matrix2adj(solution.matrix_)
+    coords = np.triu(np.argwhere(adj_matrix == 0))
     while count < 50:
         try_matrix = deepcopy(solution.matrix_)
-        coords = np.triu(np.argwhere(adj_matrix == 0))
-        coords = random.choice(coords)
-        i = coords[0]
-        j = coords[1]
+        chosen_coords = random.choice(coords)
+        i = chosen_coords[0]
+        j = chosen_coords[1]
         if i >= j:
             count += 1
             continue
-        try_matrix[i][j][0] = 3
-        try_matrix[i][j][1] = 3
-        try_matrix[i][j][2] = 3
+        for z in range(len(try_matrix[i][j])):
+            try_matrix[i][j][z] = random.randint(0, 5)
         if is_valid(try_matrix):
             return Solution(try_matrix, info, changes=[(i, j, ChangeType.ADDITION)])
         count += 1
     return None
+
+
+def find_neighbour_del_connection(solution: Solution, info: ProblemInfo):
+    adj_matrix, _ = matrix2adj(solution.matrix_)
+    coords = np.argwhere(adj_matrix != 0)
+    coords = random.choice(coords)
+    try_matrix = deepcopy(solution.matrix_)
+    i = coords[0]
+    j = coords[1]
+    for z in range(len(try_matrix[i][j])):
+        try_matrix[i][j][z] = 0
+    return Solution(try_matrix, info, changes=[(i, j, ChangeType.DELETION)])

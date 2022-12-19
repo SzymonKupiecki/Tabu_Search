@@ -1,5 +1,6 @@
 from dtypes import ProblemInfo
-from solution import Solution, find_neighbour_transfer, find_neighbour_connection, forbidden_moves
+from solution import Solution, find_neighbour_transfer, find_neighbour_add_connection, forbidden_moves\
+    , find_neighbour_del_connection
 from tabu_list import TabuList
 
 
@@ -13,11 +14,12 @@ def optimize(starting_solution: Solution, info: ProblemInfo, tabu_length=10, ite
     tabu = TabuList(tabu_length)  # initialization of tabu list
     for i in range(iterations):
         neighbours = []  # list to store neighbours found in iteration
-        for _ in range(number_of_neighbours_in_iteration//2):  # finding neighbours, 50% of each type
+        for _ in range(number_of_neighbours_in_iteration//3):  # finding neighbours, 33% of each type
             neighbours.append(find_neighbour_transfer(last_solution, info))
-            unoptimized_shit = find_neighbour_connection(last_solution, info)
-            if unoptimized_shit is not None:
-                neighbours.append(unoptimized_shit)
+            neighbours.append(find_neighbour_del_connection(last_solution, info))
+            added_connection = find_neighbour_add_connection(last_solution, info)
+            if added_connection is not None:
+                neighbours.append(added_connection)
         neighbours.sort(key=lambda x: x.quality_, reverse=True)  # sort by quality
         next_solution = None
         for candidate in neighbours:
