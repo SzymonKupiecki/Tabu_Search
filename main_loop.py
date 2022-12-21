@@ -1,4 +1,4 @@
-from dtypes import ProblemInfo
+from dtypes import ProblemInfo, ChangeType
 from solution import Solution, find_neighbour_transfer, find_neighbour_add_connection, forbidden_moves\
     , find_neighbour_del_connection
 from tabu_list import TabuList
@@ -26,7 +26,7 @@ def optimize(starting_solution: Solution, info: ProblemInfo, tabu_length=10, ite
         next_solution = None
         for candidate in neighbours:
             #  criterion of aspiration - if found solution is better than best take it despite it's forbidden by tabu
-            if candidate not in tabu and candidate != last_solution:  # and candidate.quality_ <= best_solution.quality_
+            if ((candidate not in tabu) and candidate != last_solution) or candidate.quality_ > best_solution.quality_:
                 next_solution = candidate  # take solution that fulfills requirements
                 tabu.insert_elem(forbidden_moves(last_solution))  # forbid all changes that will return to prev solution
                 history.append(next_solution.quality_)
@@ -34,7 +34,11 @@ def optimize(starting_solution: Solution, info: ProblemInfo, tabu_length=10, ite
                 break
         if next_solution is None:
             txt = f"Nie znaleziono kandydatów i =  {i}"
+            # for x in neighbours:
+            #     txt += f" chng = {x.changes_} tabu? {x in tabu}"
+            # print(tabu.tab)
             print(txt)
+            tabu.insert_elem([(-1, -1, ChangeType.INCREASE)])
             history.append(history[-1])
             continue  # we don't find correct neighbour, so we try again
         last_solution = next_solution  # if we found new solution assign it to proper variable

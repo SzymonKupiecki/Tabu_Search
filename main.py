@@ -22,9 +22,9 @@ info = ProblemInfo(np.array(hard_matrix) * 0.01, np.array(cable_vector), np.arra
 
 starting_solution = Solution(sample_matrix_generator(0, 6, 3, 0.3), info)
 random.seed(None)
-res, his, change_his = optimize(starting_solution, info, tabu_length=10, iterations=200, raport=True)
+res, his, change_his = optimize(starting_solution, info, tabu_length=40, iterations=200, raport=True)
 
-plt.plot(np.arange(0, 201), his)
+plt.plot(np.arange(0, len(his)), his)
 plt.show()
-plt.plot(np.arange(50, 201), his[50:])
-plt.show()
+# plt.plot(np.arange(50, len(his)), his[50:])
+# plt.show()
