@@ -4,6 +4,7 @@ from dtypes import ProblemInfo
 from main_loop import optimize
 from solution_matrix import sample_matrix_generator
 from solution import Solution
+from matplotlib import pyplot as plt
 
 # sample data
 hard_matrix = [[0, 20, 10, 15, 80, 60],
@@ -21,4 +22,9 @@ info = ProblemInfo(np.array(hard_matrix) * 0.01, np.array(cable_vector), np.arra
 
 starting_solution = Solution(sample_matrix_generator(0, 6, 3, 0.3), info)
 random.seed(None)
-res = optimize(starting_solution, info, tabu_length=50, iterations=200, raport=True)
+res, his = optimize(starting_solution, info, tabu_length=50, iterations=200, raport=True)
+
+plt.plot(np.arange(0, 201), his)
+plt.show()
+plt.plot(np.arange(50, 201), his[50:])
+plt.show()
