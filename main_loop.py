@@ -7,6 +7,7 @@ from tabu_list import TabuList
 def optimize(starting_solution: Solution, info: ProblemInfo, tabu_length=10, iterations=200, raport=True,
              number_of_neighbours_in_iteration=20):
     history = [starting_solution.quality_]
+    changes_history = []
     if raport:
         print(f"Start optymalizacji zadania:\n{starting_solution}\nz parametrami: długość tabu = {tabu_length}"
               f", ilość iteracji = {iterations}")
@@ -25,16 +26,15 @@ def optimize(starting_solution: Solution, info: ProblemInfo, tabu_length=10, ite
         next_solution = None
         for candidate in neighbours:
             #  criterion of aspiration - if found solution is better than best take it despite it's forbidden by tabu
-            if candidate in tabu and candidate.quality_ <= best_solution.quality_ and candidate == last_solution:
-                continue
-            next_solution = candidate  # take solution that fulfills requirements
-            tabu.insert_elem(forbidden_moves(last_solution))  # forbid all changes that will return to previous solution
-            history.append(next_solution.quality_)
-            # print(next_solution.quality_)
-            # print(next_solution)
-            break
+            if candidate not in tabu and candidate != last_solution:  # and candidate.quality_ <= best_solution.quality_
+                next_solution = candidate  # take solution that fulfills requirements
+                tabu.insert_elem(forbidden_moves(last_solution))  # forbid all changes that will return to prev solution
+                history.append(next_solution.quality_)
+                changes_history.append(next_solution.changes_)
+                break
         if next_solution is None:
-            print(f"Nie znaleziono kandydatów i =  {i}")
+            txt = f"Nie znaleziono kandydatów i =  {i}"
+            print(txt)
             history.append(history[-1])
             continue  # we don't find correct neighbour, so we try again
         last_solution = next_solution  # if we found new solution assign it to proper variable
@@ -44,4 +44,4 @@ def optimize(starting_solution: Solution, info: ProblemInfo, tabu_length=10, ite
                 print(f"Poprawa w {i} iteracji na {best_solution.quality_}")
     if raport:
         print(f"Znalezione rozwiązanie:\n{best_solution}")
-    return best_solution, history
+    return best_solution, history, changes_history

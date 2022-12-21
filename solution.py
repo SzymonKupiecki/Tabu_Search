@@ -75,7 +75,8 @@ def find_neighbour_transfer(solution: Solution, info: ProblemInfo):
 def find_neighbour_add_connection(solution: Solution, info: ProblemInfo):
     count = 0
     adj_matrix, _ = matrix2adj(solution.matrix_)
-    coords = np.triu(np.argwhere(adj_matrix == 0))
+    adj_matrix = np.triu(adj_matrix)
+    coords = np.argwhere(adj_matrix == 0)
     while count < 50:
         try_matrix = deepcopy(solution.matrix_)
         chosen_coords = random.choice(coords)
@@ -94,6 +95,7 @@ def find_neighbour_add_connection(solution: Solution, info: ProblemInfo):
 
 def find_neighbour_del_connection(solution: Solution, info: ProblemInfo):
     adj_matrix, _ = matrix2adj(solution.matrix_)
+    adj_matrix = np.triu(adj_matrix)
     coords = np.argwhere(adj_matrix != 0)
     coords = random.choice(coords)
     try_matrix = deepcopy(solution.matrix_)

@@ -11,11 +11,14 @@ class TabuList:
     def __contains__(self, item):
         if isinstance(item, Solution):
             for change_type in item.changes_:
-                if change_type in self.tab:
-                    return True
+                # if change_type in self.tab:
+                #     return True
+                for elem in self.tab:
+                    if change_type[0] == elem[0] and change_type[1] == elem[1] and change_type[2] == elem[2]:
+                        return True
             return False
         else:
-            return item in self.tab
+            return False
 
     def get_elem(self):
         if self.tab != 0:
