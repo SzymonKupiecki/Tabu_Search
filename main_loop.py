@@ -5,7 +5,7 @@ from tabu_list import TabuList
 
 
 def optimize(starting_solution: Solution, info: ProblemInfo, tabu_length=10, iterations=200, raport=True,
-             number_of_neighbours_in_iteration=20):
+             number_of_neighbours_in_iteration=20, multiple_deletions=5):
     history = [starting_solution.quality_]
     changes_history = []
     if raport:
@@ -18,10 +18,13 @@ def optimize(starting_solution: Solution, info: ProblemInfo, tabu_length=10, ite
         neighbours = []  # list to store neighbours found in iteration
         for _ in range(number_of_neighbours_in_iteration//3):  # finding neighbours, 33% of each type
             neighbours.append(find_neighbour_transfer(last_solution, info))
-            neighbours.append(find_neighbour_del_connection(last_solution, info))
+            neighbours.append(find_neighbour_del_connection(last_solution, info, 1))
             added_connection = find_neighbour_add_connection(last_solution, info)
             if added_connection is not None:
                 neighbours.append(added_connection)
+        if multiple_deletions >= 2:
+            for del_amount in range(2, multiple_deletions+1):
+                neighbours.append(find_neighbour_del_connection(last_solution, info, del_amount))
         neighbours.sort(key=lambda x: x.quality_, reverse=True)  # sort by quality
         next_solution = None
         for candidate in neighbours:

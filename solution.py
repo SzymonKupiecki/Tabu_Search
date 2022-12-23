@@ -77,7 +77,7 @@ def find_neighbour_add_connection(solution: Solution, info: ProblemInfo):
     adj_matrix, _ = matrix2adj(solution.matrix_)
     adj_matrix = np.triu(adj_matrix)
     coords = np.argwhere(adj_matrix == 0)
-    while count < 50:
+    while count < 30:
         try_matrix = deepcopy(solution.matrix_)
         chosen_coords = random.choice(coords)
         i = chosen_coords[0]
@@ -93,14 +93,19 @@ def find_neighbour_add_connection(solution: Solution, info: ProblemInfo):
     return None
 
 
-def find_neighbour_del_connection(solution: Solution, info: ProblemInfo):
+def find_neighbour_del_connection(solution: Solution, info: ProblemInfo, number_of_connections):
     adj_matrix, _ = matrix2adj(solution.matrix_)
     adj_matrix = np.triu(adj_matrix)
     coords = np.argwhere(adj_matrix != 0)
-    coords = random.choice(coords)
+    corrected_number_of_connections = min(number_of_connections, len(coords))
+    coords_lst_idx = random.sample(list(range(len(coords))), corrected_number_of_connections)
     try_matrix = deepcopy(solution.matrix_)
-    i = coords[0]
-    j = coords[1]
-    for z in range(len(try_matrix[i][j])):
-        try_matrix[i][j][z] = 0
-    return Solution(try_matrix, info, changes=[(i, j, ChangeType.DELETION)])
+    changes_lst = []
+    for act_coords_idx in coords_lst_idx:
+        coords_chosen = coords[act_coords_idx]
+        i = coords_chosen[0]
+        j = coords_chosen[1]
+        for z in range(len(try_matrix[i][j])):
+            try_matrix[i][j][z] = 0
+        changes_lst.append((i, j, ChangeType.DELETION))
+    return Solution(try_matrix, info, changes=changes_lst)
