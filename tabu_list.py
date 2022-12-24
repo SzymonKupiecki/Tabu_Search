@@ -46,6 +46,6 @@ class TabuList:
             if full != -1:  # all left changes will be inserted by adding to array mechanism
                 self.insert_elem(elem[full+1:])
         else:
-            for item in elem:
-                self.tab[0] = item
-                self.tab = np.roll(self.tab, -1)
+            for i in range(len(elem)):
+                self.tab[0] = elem[i]
+                self.tab = np.roll(self.tab, -1, axis=0)
