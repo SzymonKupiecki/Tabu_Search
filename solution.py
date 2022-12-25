@@ -56,6 +56,8 @@ def find_neighbour_transfer(solution: Solution, info: ProblemInfo):
     matrix = deepcopy(solution.matrix_)
     increase_of_cable = np.random.randint(1, 5)
     coords = np.argwhere(matrix != 0)
+    if len(coords) < 1:
+        return None
     coords = random.choice(coords)
     i = coords[0]
     j = coords[1]

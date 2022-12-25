@@ -26,7 +26,7 @@ info = ProblemInfo(np.array(hard_matrix_2), np.array(cable_vector_2), np.array(c
 
 starting_solution = Solution(sample_matrix_generator(0, len(info.hard_matrix), 3, 0.3), info)
 random.seed(None)
-res, his, change_his = optimize(starting_solution, info, tabu_length=100, iterations=500, raport=True)
+res, his, change_his = optimize(starting_solution, info, tabu_length=5, iterations=500, raport=True)
 
 plt.plot(np.arange(0, len(his)), his)
 plt.show()
