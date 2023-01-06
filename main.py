@@ -26,3 +26,6 @@ his_to_file = str(his)
 
 with open("history.txt", "w") as f_file:
     f_file.write(his_to_file)
+
+with open("result.txt", "w") as f_file:
+    f_file.write(str(res))
