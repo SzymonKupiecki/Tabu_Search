@@ -5,9 +5,10 @@ from tabu_list import TabuList
 
 
 def optimize(starting_solution: Solution, info: ProblemInfo, tabu_length=10, iterations=200, raport=True,
-             number_of_neighbours_in_iteration=20, multiple_deletions=5):
+             number_of_neighbours_in_iteration=20, multiple_deletions=5, midterm_memory=50):
     history = [starting_solution.quality_]
     changes_history = []
+    iterations_without_improvement = 0
     if raport:
         print(f"Start optymalizacji zadania:\n{starting_solution}\nz parametrami: długość tabu = {tabu_length}"
               f", ilość iteracji = {iterations}")
@@ -45,12 +46,24 @@ def optimize(starting_solution: Solution, info: ProblemInfo, tabu_length=10, ite
             print(txt)
             tabu.insert_elem([(-1, -1, ChangeType.INCREASE)])
             history.append(history[-1])
+            iterations_without_improvement += 1
             continue  # we don't find correct neighbour, so we try again
         last_solution = next_solution  # if we found new solution assign it to proper variable
         if last_solution.quality_ > best_solution.quality_:
             best_solution = last_solution
+            iterations_without_improvement = 0
             if raport:
                 print(f"Poprawa w {i} iteracji na {best_solution.quality_}")
+        else:
+            iterations_without_improvement += 1
+        # midterm memory - if there is no improvement in set time, return to best solution and reset tabu
+        if iterations_without_improvement > midterm_memory:
+            if raport:
+                print(f"Reset tabu")
+            last_solution = best_solution
+            tabu = TabuList(tabu_length)
+            iterations_without_improvement = 0  # reset memory
+
     if raport:
         print(f"Znalezione rozwiązanie:\n{best_solution}")
     return best_solution, history, changes_history
