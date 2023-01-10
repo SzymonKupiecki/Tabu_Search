@@ -34,7 +34,7 @@ def optimize(starting_solution: Solution, info: ProblemInfo, tabu_length=10, ite
             #  criterion of aspiration - if found solution is better than best take it despite it's forbidden by tabu
             if ((candidate not in tabu) and candidate != last_solution) or candidate.quality_ > best_solution.quality_:
                 next_solution = candidate  # take solution that fulfills requirements
-                tabu.insert_elem(forbidden_moves(last_solution))  # forbid all changes that will return to prev solution
+                tabu.insert_elem(forbidden_moves(next_solution))  # forbid all changes that will return to prev solution
                 history.append(next_solution.quality_)
                 changes_history.append(next_solution.changes_)
                 break
