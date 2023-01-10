@@ -5,7 +5,7 @@ from tabu_list import TabuList
 
 
 def optimize(starting_solution: Solution, info: ProblemInfo, tabu_length=10, iterations=200, raport=True,
-             number_of_neighbours_in_iteration=20, multiple_deletions=5, midterm_memory=50):
+             number_of_neighbours_in_iteration=20, multiple_deletions=5, intermediate_term_memory=50):
     history = [starting_solution.quality_]
     changes_history = []
     iterations_without_improvement = 0
@@ -56,8 +56,8 @@ def optimize(starting_solution: Solution, info: ProblemInfo, tabu_length=10, ite
                 print(f"Poprawa w {i} iteracji na {best_solution.quality_}")
         else:
             iterations_without_improvement += 1
-        # midterm memory - if there is no improvement in set time, return to best solution and reset tabu
-        if iterations_without_improvement > midterm_memory:
+        # intermediate_term memory - if there is no improvement in set time, return to best solution and reset tabu
+        if iterations_without_improvement > intermediate_term_memory:
             if raport:
                 print(f"Reset tabu")
             last_solution = best_solution
