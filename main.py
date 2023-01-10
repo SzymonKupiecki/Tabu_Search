@@ -16,6 +16,12 @@ starting_solution = Solution(sample_matrix_generator(0, len(info.hard_matrix), 3
 random.seed(None)
 res, his, change_his = optimize(starting_solution, info, tabu_length=20, intermediate_term_memory=40, iterations=500, raport=True)
 
+def change_his_to_array(change_his):
+    changes = []
+    for change in change_his:
+        changes.append(change[0][2].value)
+    return changes
+
 plt.plot(np.arange(0, len(his)), his)
 plt.show()
 # plt.plot(np.arange(50, len(his)), his[50:])
