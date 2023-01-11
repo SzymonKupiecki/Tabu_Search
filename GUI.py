@@ -44,7 +44,7 @@ class MyWindow(QMainWindow):
 
     def start(self):
         if self.p is None:
-            self.message("Executing process")
+            self.message("Działanie w toku")
             self.p = QProcess()
             self.p.finished.connect(self.finish)
             self.p.start("python3", ['main.py'])
@@ -56,7 +56,7 @@ class MyWindow(QMainWindow):
         file.close
         self.message(f"Result is:{result}")
         self.photo.setPixmap(QtGui.QPixmap("plot.png"))
-        self.message("Process finished.")
+        self.message("Koniec działania")
         self.p = None
 
 def window():
