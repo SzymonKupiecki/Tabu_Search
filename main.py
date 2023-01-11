@@ -47,6 +47,14 @@ def fun():
     # plt.show()
     his_to_file = str(his)
 
+def change_his_to_array(change_his):
+    changes = []
+    for change in change_his:
+        changes.append(change[0][2].value)
+    return changes
+
+
+
     with open("history.txt", "w") as f_file:
         f_file.write(his_to_file)
 
