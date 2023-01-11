@@ -21,22 +21,22 @@ class MyWindow(QMainWindow):
     def zapisz(self):
         if self.textEdit.toPlainText() != "" and self.textEdit_2.toPlainText() != "" and self.textEdit_3.toPlainText() != "":
             self.pushButton.setEnabled(True)
-            file = open("hard_matrix.txt", "w")
+            file = open("data/hard_matrix.txt", "w")
             file.write(self.textEdit.toPlainText())
             file.close
-            file = open("cable_vector.txt", "w")
+            file = open("data/cable_vector.txt", "w")
             file.write(self.textEdit_2.toPlainText())
             file.close
-            file = open("cost_tuples.txt", "w")
+            file = open("data/cost_tuples.txt", "w")
             file.write(self.textEdit_3.toPlainText())
             file.close
-            file = open("tabu.txt", "w")
+            file = open("data/tabu.txt", "w")
             file.write(self.textEdit_4.toPlainText())
             file.close
-            file = open("mid_mem.txt", "w")
+            file = open("data/mid_mem.txt", "w")
             file.write(self.textEdit_5.toPlainText())
             file.close
-            file = open("iteration.txt", "w")
+            file = open("data/iteration.txt", "w")
             file.write(self.textEdit_6.toPlainText())
             file.close
         else:

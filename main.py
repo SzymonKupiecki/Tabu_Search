@@ -9,26 +9,26 @@ import ast
 from examples import hard_matrix_1, cable_vector_1, cost_tuples_1
 
 def fun():
-    with open("hard_matrix.txt", "r") as f_file1:
+    with open("data/hard_matrix.txt", "r") as f_file1:
         hard_matrix = ast.literal_eval(f_file1.read())
 
-    with open("cable_vector.txt", "r") as f_file2:
+    with open("data/cable_vector.txt", "r") as f_file2:
         cable_vector = ast.literal_eval(f_file2.read())
     for i in cable_vector:
         i = tuple(i)
 
-    with open("cost_tuples.txt", "r") as f_file3:
+    with open("data/cost_tuples.txt", "r") as f_file3:
         cost_tuples = ast.literal_eval(f_file3.read())
     for i in cost_tuples:
         i = tuple(i)
 
-    with open("iteration.txt", "r") as f_file4:
+    with open("data/iteration.txt", "r") as f_file4:
         iteration = ast.literal_eval(f_file4.read())
 
-    with open("mid_mem.txt", "r") as f_file5:
+    with open("data/mid_mem.txt", "r") as f_file5:
         mid_mem = ast.literal_eval(f_file5.read())
 
-    with open("tabu.txt", "r") as f_file5:
+    with open("data/tabu.txt", "r") as f_file5:
         tabu = ast.literal_eval(f_file5.read())
 
     info = ProblemInfo(np.array(hard_matrix), np.array(cable_vector), np.array(cost_tuples))
