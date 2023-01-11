@@ -36,7 +36,6 @@ def is_valid(matrix: np.ndarray):
     # check if there is no cycles, if there are return false otherwise true
     return not is_cyclic_by_dfs(adj_list)
 
-
 def matrix2adj(matrix):
     size = len(matrix)
     adj_matrix = np.zeros((size, size), dtype=int)

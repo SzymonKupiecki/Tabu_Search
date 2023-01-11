@@ -19,6 +19,8 @@ def fun(hard_matrix_2, cable_vector_2, cost_tuples_2):
 
     starting_solution = Solution(sample_matrix_generator(0, len(info.hard_matrix), 3, 0.3), info)
     random.seed(None)
-    res, his, change_his = optimize(starting_solution, info, tabu_length=20, midterm_memory=40, iterations=500, raport=True)
+    res, his, change_his = optimize(starting_solution, info, tabu_length=20, intermediate_term_memory=40, iterations=500, raport=True)
 
     return res
+
+print(fun(hard_matrix, cable_vector, cost_tuples))

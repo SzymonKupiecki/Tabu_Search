@@ -1,13 +1,9 @@
-from PyQt5 import uic
+from PyQt5 import uic, QtGui
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QProcess
 import sys
 import numpy as np
-
-hard_matrix = None
-cable_vector = None
-cost_tuples = None
-result = None
+import main
 
 class MyWindow(QMainWindow):
     def __init__(self):
@@ -25,12 +21,24 @@ class MyWindow(QMainWindow):
     def zapisz(self):
         if self.textEdit.toPlainText() != "" and self.textEdit_2.toPlainText() != "" and self.textEdit_3.toPlainText() != "":
             self.pushButton.setEnabled(True)
-            global hard_matrix
-            hard_matrix = np.array(np.mat(self.textEdit.toPlainText()))
-            global cable_vector
-            cable_vector = np.array(np.mat(self.textEdit_2.toPlainText()))
-            global cost_tuples
-            cost_tuples = np.array(np.mat(self.textEdit_3.toPlainText()))
+            file = open("hard_matrix.txt", "w")
+            file.write(self.textEdit.toPlainText())
+            file.close
+            file = open("cable_vector.txt", "w")
+            file.write(self.textEdit_2.toPlainText())
+            file.close
+            file = open("cost_tuples.txt", "w")
+            file.write(self.textEdit_3.toPlainText())
+            file.close
+            file = open("tabu.txt", "w")
+            file.write(self.textEdit_4.toPlainText())
+            file.close
+            file = open("mid_mem.txt", "w")
+            file.write(self.textEdit_5.toPlainText())
+            file.close
+            file = open("iteration.txt", "w")
+            file.write(self.textEdit_6.toPlainText())
+            file.close
         else:
             self.pushButton.setEnabled(False)
 
@@ -42,8 +50,13 @@ class MyWindow(QMainWindow):
             self.p.start("python3", ['main.py'])
 
     def finish(self):
-        self.message("Process finished.")
+        main.fun()
+        file = open("res.txt", "r")
+        result = file.read()
+        file.close
         self.message(f"Result is:{result}")
+        self.photo.setPixmap(QtGui.QPixmap("plot.png"))
+        self.message("Process finished.")
         self.p = None
 
 def window():

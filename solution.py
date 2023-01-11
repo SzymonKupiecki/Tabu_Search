@@ -34,7 +34,6 @@ class Solution:
         obj_str += f"Quality = {self.quality_}"
         return obj_str
 
-
 def forbidden_moves(solution: Solution):
     # function return moves that should be forbidden - moves opposite to already made
     moves = []
