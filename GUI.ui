@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>915</width>
-    <height>661</height>
+    <width>1159</width>
+    <height>803</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -51,35 +51,6 @@
     </property>
     <property name="text">
      <string>definiująca budynki</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>660</x>
-      <y>240</y>
-      <width>101</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Start</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_2">
-    <property name="geometry">
-     <rect>
-      <x>660</x>
-      <y>190</y>
-      <width>101</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Zapisz dane</string>
     </property>
    </widget>
    <widget class="QTextEdit" name="textEdit">
@@ -143,8 +114,8 @@ p, li { white-space: pre-wrap; }
      <rect>
       <x>40</x>
       <y>350</y>
-      <width>401</width>
-      <height>261</height>
+      <width>331</width>
+      <height>421</height>
      </rect>
     </property>
     <property name="plainText">
@@ -154,10 +125,10 @@ p, li { white-space: pre-wrap; }
    <widget class="QLabel" name="photo">
     <property name="geometry">
      <rect>
-      <x>470</x>
+      <x>400</x>
       <y>350</y>
-      <width>411</width>
-      <height>261</height>
+      <width>741</width>
+      <height>411</height>
      </rect>
     </property>
     <property name="text">
@@ -270,19 +241,61 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>640</x>
-      <y>170</y>
+      <y>100</y>
       <width>141</width>
-      <height>131</height>
+      <height>181</height>
      </rect>
     </property>
     <property name="title">
      <string>Obsługa algorytmu</string>
     </property>
+    <widget class="QPushButton" name="pushButton_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>30</y>
+       <width>101</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Zapisz dane</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_3">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>80</y>
+       <width>101</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Wczytaj dane</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>130</y>
+       <width>101</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Start</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
-      <x>470</x>
+      <x>400</x>
       <y>330</y>
       <width>331</width>
       <height>16</height>
@@ -390,8 +403,6 @@ p, li { white-space: pre-wrap; }
    <zorder>label</zorder>
    <zorder>label_2</zorder>
    <zorder>label_3</zorder>
-   <zorder>pushButton</zorder>
-   <zorder>pushButton_2</zorder>
    <zorder>textEdit</zorder>
    <zorder>textEdit_2</zorder>
    <zorder>textEdit_3</zorder>

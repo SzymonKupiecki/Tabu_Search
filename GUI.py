@@ -4,6 +4,7 @@ from PyQt5.QtCore import QProcess
 import sys
 import numpy as np
 import main
+import shutil
 
 class MyWindow(QMainWindow):
     def __init__(self):
@@ -12,6 +13,7 @@ class MyWindow(QMainWindow):
         self.show()
         self.plainTextEdit.setReadOnly(True)
         self.pushButton_2.clicked.connect(self.zapisz)
+        self.pushButton_3.clicked.connect(self.wczytaj)
         self.pushButton.clicked.connect(self.start)
         self.p = None
 
@@ -41,6 +43,17 @@ class MyWindow(QMainWindow):
             file.close
         else:
             self.pushButton.setEnabled(False)
+
+    def wczytaj(self):
+        self.pushButton.setEnabled(True)
+        shutil.copyfile('data/hard_matrix_to_read.txt','data/hard_matrix.txt')
+        shutil.copyfile('data/cable_vector_to_read.txt', 'data/cable_vector.txt')
+        shutil.copyfile('data/cost_tuples_to_read.txt', 'data/cost_tuples.txt')
+        shutil.copyfile('data/tabu_to_read.txt', 'data/tabu.txt')
+        shutil.copyfile('data/mid_mem_to_read.txt', 'data/mid_mem.txt')
+        shutil.copyfile('data/iteration_to_read.txt', 'data/iteration.txt')
+
+
 
     def start(self):
         if self.p is None:

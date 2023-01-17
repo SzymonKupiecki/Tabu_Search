@@ -1,1 +1,1 @@
-Format danych: int
+40
