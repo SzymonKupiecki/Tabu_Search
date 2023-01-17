@@ -1,5 +1,5 @@
 import numpy as np
-from solution import Solution
+from src.solution import Solution
 from typing import Tuple
 
 

@@ -1,12 +1,13 @@
 import random
 import numpy as np
-from dtypes import ProblemInfo
-from main_loop import optimize
-from solution_matrix import sample_matrix_generator
-from solution import Solution
+from src.dtypes import ProblemInfo
+from src.main_loop import optimize
+from src.solution_matrix import sample_matrix_generator
+from src.solution import Solution
 from matplotlib import pyplot as plt
 import ast
-from examples import hard_matrix_1, cable_vector_1, cost_tuples_1
+from src.examples import hard_matrix_1, cable_vector_1, cost_tuples_1
+
 
 def fun():
     with open("data/hard_matrix.txt", "r") as f_file1:
@@ -38,19 +39,20 @@ def fun():
     res, his, change_his = optimize(starting_solution, info, tabu_length=tabu, intermediate_term_memory=mid_mem, iterations=iteration, raport=True)
 
     plt.plot(np.arange(0, len(his)), his)
-    plt.savefig('plot.png')
+    plt.savefig('data/plot.png')
     plt.show()
-    plt.savefig('plot_blank.png')
+    plt.savefig('data/plot_blank.png')
     # plt.plot(np.arange(50, len(his)), his[50:])
     # plt.show()
     # plt.plot(np.arange(0, 30), his[0:30])
     # plt.show()
     his_to_file = str(his)
+    plt.close()
 
-    with open("history.txt", "w") as f_file:
+    with open("results/history.txt", "w") as f_file:
         f_file.write(his_to_file)
 
-    with open("res.txt", "w") as f_file:
+    with open("results/res.txt", "w") as f_file:
         f_file.write(str(res))
 
 

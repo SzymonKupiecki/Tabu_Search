@@ -1,9 +1,9 @@
 import numpy as np
-from quality import quality
-from dtypes import ProblemInfo, ChangeType
+from src.quality import quality
+from src.dtypes import ProblemInfo, ChangeType
 from copy import deepcopy
 from typing import List, Tuple
-from solution_matrix import is_valid, matrix2adj
+from src.solution_matrix import is_valid, matrix2adj
 import random
 
 

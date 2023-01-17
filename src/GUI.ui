@@ -135,7 +135,7 @@ p, li { white-space: pre-wrap; }
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>plot_blank.png</pixmap>
+     <pixmap>data/plot_blank.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>

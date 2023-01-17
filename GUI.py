@@ -9,7 +9,7 @@ import shutil
 class MyWindow(QMainWindow):
     def __init__(self):
         super(MyWindow, self).__init__()
-        uic.loadUi("GUI.ui", self)
+        uic.loadUi("src/GUI.ui", self)
         self.show()
         self.plainTextEdit.setReadOnly(True)
         self.pushButton_2.clicked.connect(self.zapisz)
@@ -25,22 +25,22 @@ class MyWindow(QMainWindow):
             self.pushButton.setEnabled(True)
             file = open("data/hard_matrix.txt", "w")
             file.write(self.textEdit.toPlainText())
-            file.close
+            file.close()
             file = open("data/cable_vector.txt", "w")
             file.write(self.textEdit_2.toPlainText())
-            file.close
+            file.close()
             file = open("data/cost_tuples.txt", "w")
             file.write(self.textEdit_3.toPlainText())
-            file.close
+            file.close()
             file = open("data/tabu.txt", "w")
             file.write(self.textEdit_4.toPlainText())
-            file.close
+            file.close()
             file = open("data/mid_mem.txt", "w")
             file.write(self.textEdit_5.toPlainText())
-            file.close
+            file.close()
             file = open("data/iteration.txt", "w")
             file.write(self.textEdit_6.toPlainText())
-            file.close
+            file.close()
         else:
             self.pushButton.setEnabled(False)
 
@@ -64,17 +64,19 @@ class MyWindow(QMainWindow):
 
     def finish(self):
         main.fun()
-        file = open("res.txt", "r")
+        file = open("results/res.txt", "r")
         result = file.read()
-        file.close
+        file.close()
         self.message(f"Result is:{result}")
-        self.photo.setPixmap(QtGui.QPixmap("plot.png"))
+        self.photo.setPixmap(QtGui.QPixmap("data/plot.png"))
         self.message("Koniec działania")
         self.p = None
+
 
 def window():
     app = QApplication([])
     win = MyWindow()
     app.exec_()
+
 
 window()

@@ -1,7 +1,7 @@
-from dtypes import ProblemInfo, ChangeType
-from solution import Solution, find_neighbour_transfer, find_neighbour_add_connection, forbidden_moves\
+from src.dtypes import ProblemInfo, ChangeType
+from src.solution import Solution, find_neighbour_transfer, find_neighbour_add_connection, forbidden_moves\
     , find_neighbour_del_connection
-from tabu_list import TabuList
+from src.tabu_list import TabuList
 
 
 def optimize(starting_solution: Solution, info: ProblemInfo, tabu_length=10, iterations=200, raport=True,
